@@ -13,6 +13,8 @@ import {
   Step,
   Dropdown,
   Input,
+  SegmentGroup,
+  Segment,
 } from "semantic-ui-react";
 
 const HomePage = () => {
@@ -24,7 +26,7 @@ const HomePage = () => {
 
   return (
     <Grid
-      style={{ height: "100vh", backgroundColor: "#071F39", color: "white" }}
+      style={{ minHeight: "100vh", backgroundColor: "#071F39", color: "white" }}
     >
       <Menu fixed="top" inverted style={{ backgroundColor: "#07192D" }}>
         <Container>
@@ -71,22 +73,15 @@ const HomePage = () => {
               <StepTitle>Demo</StepTitle>
             </StepContent>
           </Step>
-
-          <Step disabled>
-            <StepContent>
-              <StepTitle>Demo</StepTitle>
-            </StepContent>
-          </Step>
         </StepGroup>
       </Container>
 
-      <Container fluid>
-        <Menu
-          fluid
-          inverted
-          style={{ backgroundColor: "#07192D", marginTop: "-21.4em" }}
+      <Container style={{ marginTop: "-22em" }}>
+        <SegmentGroup
+          horizontal
+          style={{ width: 810, height: 40, backgroundColor: "#071F39" }}
         >
-          <Menu.Item>
+          <Segment>
             <Dropdown
               style={{
                 backgroundColor: "#07192D",
@@ -98,8 +93,8 @@ const HomePage = () => {
               options={scriptOptions}
               selection
             />
-          </Menu.Item>
-          <Menu.Item>
+          </Segment>
+          <Segment>
             <Input
               action={{
                 style: {
@@ -119,8 +114,9 @@ const HomePage = () => {
                 },
               }}
             />
-          </Menu.Item>
-          <Menu.Item>
+          </Segment>
+          <Segment>
+            {" "}
             <Input
               action={{
                 style: {
@@ -140,8 +136,8 @@ const HomePage = () => {
                 },
               }}
             />
-          </Menu.Item>
-        </Menu>
+          </Segment>
+        </SegmentGroup>
       </Container>
     </Grid>
   );
