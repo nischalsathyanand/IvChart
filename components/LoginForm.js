@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Grid, Form, Button, Input, Image } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
+import logoImages from "../images/fb.png";
 import "../index.css";
-
+//EBE8E3
 const LoginForm = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [otp, setOTP] = useState("");
@@ -26,7 +27,7 @@ const LoginForm = () => {
   return (
     <Grid
       textAlign="center"
-      style={{ height: "100vh", backgroundColor: "#EBE8E3" }}
+      style={{ height: "100vh", backgroundColor: "#071F39" }}
       verticalAlign="middle"
     >
       <Grid.Column style={{ maxWidth: 450 }}>
@@ -40,15 +41,14 @@ const LoginForm = () => {
           }}
         >
           <Image
-            src="../images/fb.png"
+            src={logoImages}
+            size="mini"
             //alt="App Logo"
             style={{ marginRight: "0.5rem" }}
           />
           FirstBench
         </h2>
-        <h3
-          style={{ marginBottom: "2rem", color: "#424242", textAlign: "left" }}
-        >
+        <h3 style={{ marginBottom: "2rem", color: "white", textAlign: "left" }}>
           Login
         </h3>
         <Form size="large">
