@@ -233,7 +233,7 @@ const HomePage = () => {
                     <Table.Body>
                       {scriptData.map((item, index) => (
                         <Table.Row key={index}>
-                          <Table.Cell>{item.timestamp}</Table.Cell>
+                          <Table.Cell>{item.timestamp.slice(0, 10)}</Table.Cell>
                           <Table.Cell>{item.implied_volatility}</Table.Cell>
                           <Table.Cell>10</Table.Cell>{" "}
                           {/* Default value for Combined Premium */}
