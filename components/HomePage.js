@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import logoImages from "../images/fb.png";
 import "../index.css";
+import LineChart from "./LineChart";
+
 import {
   Container,
   Header,
@@ -15,14 +17,60 @@ import {
   Input,
   Segment,
   Table,
+  Loader,
 } from "semantic-ui-react";
 
 const HomePage = () => {
-  const scriptOptions = [
-    { key: "script1", text: "NIFTY", value: "NIFTY" },
-    { key: "script2", text: "TCS", value: "TCS" },
-    { key: "script3", text: "HDFCBANK", value: "HDFCBANK" },
-  ];
+  const [scriptOptions, setScriptOptions] = useState([]);
+  const [selectedScript, setSelectedScript] = useState(null);
+  const [scriptData, setScriptData] = useState([]);
+
+  const [averageIV, setAverageIV] = useState(null); // avarage
+
+  useEffect(() => {
+    const fetchScriptNames = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/getscript");
+        if (!response.ok) {
+          throw new Error("Failed to fetch script names");
+        }
+        const data = await response.json();
+        const options = Object.keys(data.scripts).map((key) => ({
+          key: key,
+          text: key.toUpperCase(),
+          value: key,
+        }));
+
+        setScriptOptions(options);
+      } catch (error) {
+        console.error("Error fetching script names:", error);
+      }
+    };
+
+    fetchScriptNames();
+  }, []);
+
+  const handleScriptChange = async (event, { value }) => {
+    try {
+      setSelectedScript(value);
+      const response = await fetch(
+        `http://localhost:3000/api/getscriptbyname?name=${value}`
+      );
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data for script: ${value}`);
+      }
+      const data = await response.json();
+
+      // Calculate the average IV of the last element
+      const lastElement = data[data.length - 1];
+      const avgIV = lastElement ? lastElement.average : null;
+
+      setScriptData(data);
+      setAverageIV(avgIV);
+    } catch (error) {
+      console.error("Error fetching script data:", error);
+    }
+  };
 
   return (
     <Grid
@@ -101,6 +149,7 @@ const HomePage = () => {
                   placeholder="Script"
                   options={scriptOptions}
                   selection
+                  onChange={handleScriptChange}
                 />
               </Grid.Column>
               <Grid.Column>
@@ -115,12 +164,14 @@ const HomePage = () => {
                     content: "IV Percentile",
                   }}
                   actionPosition="left"
-                  defaultValue="52.03"
+                  defaultValue="N/A"
+                  readOnly // Make the input field read-only
                   input={{
                     style: {
                       backgroundColor: "#07192D",
                       color: "#FE9D01",
                       fontWeight: "bold",
+                      border: "none",
                     },
                   }}
                 />
@@ -137,12 +188,14 @@ const HomePage = () => {
                     content: "IV Avg",
                   }}
                   actionPosition="left"
-                  defaultValue="00.00"
+                  value={averageIV || ""}
+                  readOnly // Make the input field read-only
                   input={{
                     style: {
                       backgroundColor: "#07192D",
                       color: "#FE9D01",
                       fontWeight: "bold",
+                      border: "none",
                     },
                   }}
                 />
@@ -164,7 +217,7 @@ const HomePage = () => {
                     color: "#FE9D01",
                   }}
                 >
-                  Chart
+                  <LineChart scriptData={scriptData} />
                 </Segment>
               </Grid.Column>
               <Grid.Column width={4} style={{ height: "100%" }}>
@@ -177,23 +230,15 @@ const HomePage = () => {
                         <Table.HeaderCell>Combined Premium</Table.HeaderCell>
                       </Table.Row>
                     </Table.Header>
-
                     <Table.Body>
-                      <Table.Row>
-                        <Table.Cell>20 Apr 24</Table.Cell>
-                        <Table.Cell>100</Table.Cell>
-                        <Table.Cell>10</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>20 Apr 24</Table.Cell>
-                        <Table.Cell>100</Table.Cell>
-                        <Table.Cell>10</Table.Cell>
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>20 Apr 24</Table.Cell>
-                        <Table.Cell>100</Table.Cell>
-                        <Table.Cell>10</Table.Cell>
-                      </Table.Row>
+                      {scriptData.map((item, index) => (
+                        <Table.Row key={index}>
+                          <Table.Cell>{item.timestamp}</Table.Cell>
+                          <Table.Cell>{item.implied_volatility}</Table.Cell>
+                          <Table.Cell>10</Table.Cell>{" "}
+                          {/* Default value for Combined Premium */}
+                        </Table.Row>
+                      ))}
                     </Table.Body>
                   </Table>
                 </Segment>
