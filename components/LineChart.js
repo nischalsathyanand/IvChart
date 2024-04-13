@@ -21,7 +21,7 @@ export const options = {
     },
     title: {
       display: true,
-      text: "Chart.js Line Chart",
+      text: "",
     },
   },
   scales: {
@@ -30,6 +30,7 @@ export const options = {
         color: "#FE9D01", // this will change the color of the x-axis labels
         font: {
           color: "#FE9D01", // this will change the color of the text in the x-axis labels
+          weight: "bold",
         },
       },
     },
@@ -38,6 +39,7 @@ export const options = {
         color: "#FE9D01", // this will change the color of the y-axis labels
         font: {
           color: "#FE9D01", // this will change the color of the text in the y-axis labels
+          weight: "bold",
         },
       },
     },

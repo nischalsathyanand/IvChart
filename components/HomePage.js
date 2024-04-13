@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import logoImages from "../images/fb.png";
 import "../index.css";
 import LineChart from "./LineChart";
+import MyTable from "./MyTable";
 
 import {
   Container,
@@ -17,7 +18,7 @@ import {
   Input,
   Segment,
   Table,
-  Loader,
+  Pagination,
 } from "semantic-ui-react";
 
 const HomePage = () => {
@@ -209,7 +210,7 @@ const HomePage = () => {
         <Grid.Column>
           <Segment style={{ backgroundColor: "#071F39", marginTop: "-2em" }}>
             <Grid columns={2} stackable style={{ height: "100%" }}>
-              <Grid.Column width={12} style={{ height: "100%" }}>
+              <Grid.Column width={11} style={{ height: "100%" }}>
                 <Segment
                   style={{
                     backgroundColor: "#07192D",
@@ -220,27 +221,9 @@ const HomePage = () => {
                   <LineChart scriptData={scriptData} />
                 </Segment>
               </Grid.Column>
-              <Grid.Column width={4} style={{ height: "100%" }}>
+              <Grid.Column width={5} style={{ height: "100%" }}>
                 <Segment style={{ backgroundColor: "#07192D", height: "100%" }}>
-                  <Table basic inverted selectable>
-                    <Table.Header>
-                      <Table.Row>
-                        <Table.HeaderCell>Date</Table.HeaderCell>
-                        <Table.HeaderCell>IV</Table.HeaderCell>
-                        <Table.HeaderCell>Combined Premium</Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                      {scriptData.map((item, index) => (
-                        <Table.Row key={index}>
-                          <Table.Cell>{item.timestamp.slice(0, 10)}</Table.Cell>
-                          <Table.Cell>{item.implied_volatility}</Table.Cell>
-                          <Table.Cell>10</Table.Cell>{" "}
-                          {/* Default value for Combined Premium */}
-                        </Table.Row>
-                      ))}
-                    </Table.Body>
-                  </Table>
+                  <MyTable data={scriptData} itemsPerPage={9} />
                 </Segment>
               </Grid.Column>
             </Grid>
